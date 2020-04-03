@@ -25,11 +25,9 @@
             try
             {
                 var url = $"wss://server.paintbot.cygni.se/{GameMode.ToString().ToLower()}";
-                _client = await Client.ConnectAsync(
-                    new Uri(url), ct);
+                _client = await Client.ConnectAsync(new Uri(url), ct);
 
-                await _client.SendAsync(
-                    new RegisterPlayer(Name, new GameSettings()), ct);
+                await _client.SendAsync(new RegisterPlayer(Name, new GameSettings()), ct);
 
                 await foreach (var response in _client.ReceiveEnumerableAsync<Response>(ct))
                 {
@@ -89,7 +87,7 @@
 
                 case InvalidPlayerName invalidPlayerName:
                     OnInfoEvent(invalidPlayerName);
-                    throw new Exception("Player name was invalid. Shutting down");
+                    throw new Exception("Player name was invalid. Shutting down...");
 
                 default:
                     Console.WriteLine($"Unhandled response of type {response?.Type}");
@@ -133,7 +131,7 @@
 
         private void OnHearBeatEvent(HeartBeatResponse heartBeat)
         {
-            Console.WriteLine("Received HeartBeat Response");
+            Console.WriteLine(heartBeat);
             SendHearBeat();
         }
 
